@@ -8,12 +8,13 @@
 
 **🚨 PLEASE READ BEFORE USING:**
 
-- **📊 DEFAULT: 5-minute intervals** - Do NOT decrease below 5 minutes to avoid server overload
+- **📊 DEFAULT: 5-minute intervals** - Please honor this minimum to avoid server overload
 - **🤝 BE RESPECTFUL** - The embassy servers are shared resources for everyone
 - **📈 REASONABLE LIMITS** - Excessive requests can hurt everyone's access
 - **🔄 CONSIDER OTHERS** - Other applicants also need access to the system
 - **⚖️ YOUR RESPONSIBILITY** - You are responsible for complying with the website's terms of service
 - **🚫 NO SPAMMING** - This tool is for legitimate monitoring, not server abuse
+- **🎯 HONOR SYSTEM** - This tool relies on your integrity - there are no technical restrictions
 
 **Recommended Settings:**
 - ✅ **CHECK_INTERVAL=300** (5 minutes) - Default and recommended
@@ -71,10 +72,10 @@ CHECK_INTERVAL=300  # 5 minutes - RECOMMENDED MINIMUM (do not go lower)
 ```
 
 **⚠️ CHECK_INTERVAL Guidelines:**
-- ✅ **300 (5 minutes)** - Default, recommended minimum
+- ✅ **300 (5 minutes)** - Default, recommended minimum for responsible usage
 - ✅ **600 (10 minutes)** - More considerate, still effective  
 - ✅ **900 (15 minutes)** - Very respectful for off-peak monitoring
-- ❌ **<300 (<5 minutes)** - Please avoid to prevent server overload
+- ⚠️ **<300 (<5 minutes)** - Please avoid to prevent server overload - **your responsibility!**
 
 ### 3. Gmail App Password Setup
 1. **Enable 2-Factor Authentication** on your Google account
@@ -257,11 +258,13 @@ This ensures correct Python environment and dependency handling.
 - **Legitimate use only** - Only monitor for appointments you actually need
 
 ### 🚨 **What NOT to Do:**
-- ❌ Don't set CHECK_INTERVAL below 300 seconds (5 minutes)
-- ❌ Don't run multiple monitors for the same appointment type
-- ❌ Don't continue monitoring after booking successfully  
-- ❌ Don't share accounts or use this for commercial purposes
-- ❌ Don't modify the code to make more aggressive requests
+- ⚠️ **Please don't** set CHECK_INTERVAL below 300 seconds (5 minutes)
+- ⚠️ **Please don't** run multiple monitors for the same appointment type
+- ⚠️ **Please don't** continue monitoring after booking successfully  
+- ⚠️ **Please don't** share accounts or use this for commercial purposes
+- ⚠️ **Please don't** modify the code to make more aggressive requests
+
+**Note:** This tool relies on your integrity and responsibility. There are no technical restrictions - please be respectful!
 
 ### 🌟 **Best Practices:**
 - ✅ Use longer intervals during busy periods (10-15 minutes)
