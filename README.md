@@ -4,6 +4,26 @@
 
 **✨ Super Simple Approach:** You login manually, the monitor runs in your browser session - no cookies, no bot detection!
 
+## ⚠️ **IMPORTANT: Responsible Usage Warning**
+
+**🚨 PLEASE READ BEFORE USING:**
+
+- **📊 DEFAULT: 5-minute intervals** - Do NOT decrease below 5 minutes to avoid server overload
+- **🤝 BE RESPECTFUL** - The embassy servers are shared resources for everyone
+- **📈 REASONABLE LIMITS** - Excessive requests can hurt everyone's access
+- **🔄 CONSIDER OTHERS** - Other applicants also need access to the system
+- **⚖️ YOUR RESPONSIBILITY** - You are responsible for complying with the website's terms of service
+- **🚫 NO SPAMMING** - This tool is for legitimate monitoring, not server abuse
+
+**Recommended Settings:**
+- ✅ **CHECK_INTERVAL=300** (5 minutes) - Default and recommended
+- ✅ **CHECK_INTERVAL=600** (10 minutes) - Even more considerate  
+- ❌ **CHECK_INTERVAL<300** - Please avoid shorter intervals
+
+**⚖️ Legal Notice:** This tool is for educational purposes. Users must comply with prenotami.esteri.it's terms of service and applicable laws. Use responsibly and respectfully.
+
+---
+
 ## 🚀 Quick Start
 
 ```bash
@@ -47,8 +67,14 @@ Edit `.env` file with your Gmail settings:
 SENDER_EMAIL=your_gmail@gmail.com
 SENDER_PASSWORD=your_app_password  # Gmail App Password (see below)
 RECEIVER_EMAIL=your_email@gmail.com
-CHECK_INTERVAL=300  # 5 minutes between checks
+CHECK_INTERVAL=300  # 5 minutes - RECOMMENDED MINIMUM (do not go lower)
 ```
+
+**⚠️ CHECK_INTERVAL Guidelines:**
+- ✅ **300 (5 minutes)** - Default, recommended minimum
+- ✅ **600 (10 minutes)** - More considerate, still effective  
+- ✅ **900 (15 minutes)** - Very respectful for off-peak monitoring
+- ❌ **<300 (<5 minutes)** - Please avoid to prevent server overload
 
 ### 3. Gmail App Password Setup
 1. **Enable 2-Factor Authentication** on your Google account
@@ -213,6 +239,38 @@ This ensures correct Python environment and dependency handling.
 - Fill form completely and accurately  
 - Double-check all information before submitting
 - Take screenshots of confirmation page
+
+## 🤝 Ethical Usage & Server Respect
+
+**This tool comes with responsibility. Please:**
+
+### 🌐 **Server Etiquette:**
+- **Use default 5-minute intervals** - Shorter intervals stress embassy servers
+- **Monitor during off-peak hours** when possible (late night, early morning)
+- **Stop monitoring** once you successfully book an appointment
+- **Don't run multiple instances** of the monitor simultaneously
+
+### ⚖️ **Legal & Ethical Guidelines:**
+- **Educational purpose** - This tool is for learning automation concepts
+- **Terms of service** - You must comply with prenotami.esteri.it's terms
+- **Fair access** - Don't monopolize server resources
+- **Legitimate use only** - Only monitor for appointments you actually need
+
+### 🚨 **What NOT to Do:**
+- ❌ Don't set CHECK_INTERVAL below 300 seconds (5 minutes)
+- ❌ Don't run multiple monitors for the same appointment type
+- ❌ Don't continue monitoring after booking successfully  
+- ❌ Don't share accounts or use this for commercial purposes
+- ❌ Don't modify the code to make more aggressive requests
+
+### 🌟 **Best Practices:**
+- ✅ Use longer intervals during busy periods (10-15 minutes)
+- ✅ Focus monitoring during known release times
+- ✅ Stop the monitor when you don't need it
+- ✅ Help others learn responsible automation practices
+- ✅ Report any issues or improvements to the community
+
+**Remember:** Embassy systems serve thousands of applicants. Your respectful usage helps ensure the system remains accessible for everyone. 🙏
 
 ---
 

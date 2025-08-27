@@ -49,8 +49,19 @@ class BrowserVisaMonitor:
         self.smtp_server = os.getenv('SMTP_SERVER', 'smtp.gmail.com')
         self.smtp_port = int(os.getenv('SMTP_PORT', 587))
         
-        # Monitoring configuration
-        self.check_interval = int(os.getenv('CHECK_INTERVAL', 300))  # 5 minutes
+        # Monitoring configuration with responsible usage enforcement
+        requested_interval = int(os.getenv('CHECK_INTERVAL', 300))
+        minimum_interval = 300  # 5 minutes minimum for server respect
+        
+        if requested_interval < minimum_interval:
+            logger.warning(f"⚠️ Requested interval {requested_interval}s is too aggressive!")
+            logger.warning(f"🤝 Enforcing minimum {minimum_interval}s (5 minutes) for server respect")
+            logger.warning("📖 Please read the README about responsible usage")
+            self.check_interval = minimum_interval
+        else:
+            self.check_interval = requested_interval
+            
+        logger.info(f"⏰ Check interval set to {self.check_interval} seconds ({self.check_interval//60} minutes)")
         self.driver = None
 
     def setup_browser(self):
