@@ -67,9 +67,15 @@ Edit `.env` file with your Gmail settings:
 ```bash
 SENDER_EMAIL=your_gmail@gmail.com
 SENDER_PASSWORD=your_app_password  # Gmail App Password (see below)
-RECEIVER_EMAIL=your_email@gmail.com
+RECEIVER_EMAIL=email1@gmail.com,email2@yahoo.com,email3@outlook.com  # Multiple emails supported
 CHECK_INTERVAL=300  # 5 minutes - RECOMMENDED MINIMUM (do not go lower)
 ```
+
+**📧 Multiple Email Recipients:**
+- You can send alerts to multiple email addresses
+- Separate emails with commas (no spaces needed)
+- Example: `RECEIVER_EMAIL=john@gmail.com,jane@yahoo.com,team@company.com`
+- All recipients will receive the same notification simultaneously
 
 **⚠️ CHECK_INTERVAL Guidelines:**
 - ✅ **300 (5 minutes)** - Default, recommended minimum for responsible usage

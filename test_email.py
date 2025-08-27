@@ -18,20 +18,23 @@ def test_email():
     """Test email functionality."""
     sender_email = os.getenv('SENDER_EMAIL')
     sender_password = os.getenv('SENDER_PASSWORD')
-    receiver_email = os.getenv('RECEIVER_EMAIL')
+    receiver_email_str = os.getenv('RECEIVER_EMAIL', '')
+    # Parse comma-separated email addresses
+    receiver_emails = [email.strip() for email in receiver_email_str.split(',') if email.strip()]
     smtp_server = os.getenv('SMTP_SERVER', 'smtp.gmail.com')
     smtp_port = int(os.getenv('SMTP_PORT', 587))
     
-    if not all([sender_email, sender_password, receiver_email]):
+    if not all([sender_email, sender_password, receiver_emails]):
         print("❌ Missing email configuration. Please check your .env file.")
         return False
     
     try:
         print("📧 Testing email configuration...")
+        print(f"📧 Sending to {len(receiver_emails)} recipient(s): {', '.join(receiver_emails)}")
         
         msg = MIMEMultipart()
         msg['From'] = sender_email
-        msg['To'] = receiver_email
+        msg['To'] = ', '.join(receiver_emails)  # Join all emails for display
         msg['Subject'] = "🧪 Prenotami Bot - Test Email"
         
         body = f"""
@@ -40,6 +43,7 @@ def test_email():
             <h2>Email Configuration Test</h2>
             <p>This is a test email from your Prenotami Bot.</p>
             <p><strong>Sent at:</strong> {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}</p>
+            <p><strong>Recipients:</strong> {len(receiver_emails)} email(s)</p>
             <p>If you received this email, your configuration is working correctly!</p>
         </body>
         </html>
@@ -56,10 +60,11 @@ def test_email():
         
         print("📮 Sending test email...")
         text = msg.as_string()
-        server.sendmail(sender_email, receiver_email, text)
+        # Send to all recipients
+        server.sendmail(sender_email, receiver_emails, text)
         server.quit()
         
-        print(f"✅ Test email sent successfully to {receiver_email}")
+        print(f"✅ Test email sent successfully to {len(receiver_emails)} recipient(s): {', '.join(receiver_emails)}")
         return True
         
     except Exception as e:

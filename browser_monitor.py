@@ -45,7 +45,9 @@ class BrowserVisaMonitor:
         # Email configuration
         self.sender_email = os.getenv('SENDER_EMAIL')
         self.sender_password = os.getenv('SENDER_PASSWORD') 
-        self.receiver_email = os.getenv('RECEIVER_EMAIL')
+        receiver_email_str = os.getenv('RECEIVER_EMAIL', '')
+        # Parse comma-separated email addresses
+        self.receiver_emails = [email.strip() for email in receiver_email_str.split(',') if email.strip()]
         self.smtp_server = os.getenv('SMTP_SERVER', 'smtp.gmail.com')
         self.smtp_port = int(os.getenv('SMTP_PORT', 587))
         
@@ -427,7 +429,7 @@ class BrowserVisaMonitor:
     def send_alert(self, slots_available=True):
         """Send email alert about slot availability."""
         try:
-            if not all([self.sender_email, self.sender_password, self.receiver_email]):
+            if not all([self.sender_email, self.sender_password, self.receiver_emails]):
                 logger.warning("⚠️ Email not configured - skipping notification")
                 return False
             
@@ -479,7 +481,7 @@ class BrowserVisaMonitor:
             
             msg = MIMEMultipart()
             msg['From'] = self.sender_email
-            msg['To'] = self.receiver_email
+            msg['To'] = ', '.join(self.receiver_emails)  # Join all emails for display
             msg['Subject'] = subject
             
             msg.attach(MIMEText(body, 'html'))
@@ -491,10 +493,11 @@ class BrowserVisaMonitor:
             server.login(self.sender_email, self.sender_password)
             
             text = msg.as_string()
-            server.sendmail(self.sender_email, self.receiver_email, text)
+            # Send to all recipients
+            server.sendmail(self.sender_email, self.receiver_emails, text)
             server.quit()
             
-            logger.info(f"✅ Alert sent successfully to {self.receiver_email}")
+            logger.info(f"✅ Alert sent successfully to {len(self.receiver_emails)} recipient(s): {', '.join(self.receiver_emails)}")
             return True
             
         except Exception as e:
@@ -507,7 +510,10 @@ class BrowserVisaMonitor:
         logger.info(f"🎯 Target: VISA booking slots (ID: 4755)")
         logger.info(f"⏰ Check interval: {self.check_interval} seconds ({self.check_interval//60} minutes)")
         logger.info(f"📧 Notifications: {'Enabled' if self.sender_email else 'Disabled'}")
-        logger.info(f"📧 Email: {self.sender_email} → {self.receiver_email}")
+        if self.receiver_emails:
+            logger.info(f"📧 Email: {self.sender_email} → {len(self.receiver_emails)} recipient(s): {', '.join(self.receiver_emails)}")
+        else:
+            logger.info(f"📧 Email: {self.sender_email} → No recipients configured")
         
         consecutive_errors = 0
         max_errors = 3
