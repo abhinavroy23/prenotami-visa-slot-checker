@@ -87,11 +87,47 @@ class BrowserVisaMonitor:
                     logger.info("✅ Using Chrome with automatic driver detection")
                 except Exception as e2:
                     logger.info(f"ℹ️ Automatic detection failed: {str(e2)}")
-                    # Fallback to webdriver-manager
+                    # Clear webdriver-manager cache and try again
+                    logger.info("🧹 Clearing ChromeDriver cache...")
+                    try:
+                        import shutil
+                        cache_path = os.path.expanduser("~/.wdm")
+                        if os.path.exists(cache_path):
+                            shutil.rmtree(cache_path)
+                            logger.info("✅ Cache cleared")
+                    except Exception as cache_error:
+                        logger.warning(f"⚠️ Could not clear cache: {cache_error}")
+                    
+                    # Try webdriver-manager with fresh download
                     logger.info("🔄 Downloading fresh ChromeDriver...")
-                    service = Service(ChromeDriverManager().install())
-                    self.driver = webdriver.Chrome(service=service, options=chrome_options)
-                    logger.info("✅ Using downloaded ChromeDriver")
+                    try:
+                        driver_path = ChromeDriverManager().install()
+                        logger.info(f"📍 Downloaded driver to: {driver_path}")
+                        
+                        # Verify the downloaded file is executable
+                        if os.path.exists(driver_path) and os.access(driver_path, os.X_OK):
+                            service = Service(driver_path)
+                            self.driver = webdriver.Chrome(service=service, options=chrome_options)
+                            logger.info("✅ Using downloaded ChromeDriver")
+                        else:
+                            logger.error(f"❌ Downloaded driver is not executable: {driver_path}")
+                            raise Exception("ChromeDriver not executable")
+                    except Exception as wdm_error:
+                        logger.error(f"❌ WebDriver Manager failed: {wdm_error}")
+                        # Final fallback - try to find Chrome in common locations
+                        chrome_locations = [
+                            "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+                            "/usr/bin/google-chrome",
+                            "/usr/local/bin/chromedriver"
+                        ]
+                        
+                        logger.info("🔍 Trying alternative Chrome locations...")
+                        for location in chrome_locations:
+                            if os.path.exists(location):
+                                logger.info(f"📍 Found Chrome at: {location}")
+                                break
+                        
+                        raise Exception("All ChromeDriver methods failed")
             
             # Configure browser to avoid detection
             logger.info("🛡️ Applying anti-detection measures...")
