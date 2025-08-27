@@ -36,8 +36,21 @@ echo "📦 Checking dependencies..."
 # Check if selenium is installed
 if ! $PYTHON_PATH -c "import selenium" 2>/dev/null; then
     echo "⚠️  Selenium not found, installing dependencies..."
-    $PYTHON_PATH -m pip install -r requirements.txt
-    echo "✅ Dependencies installed"
+    echo "💡 Trying user installation to avoid externally-managed-environment error..."
+    
+    # Try user installation first
+    if $PYTHON_PATH -m pip install --user -r requirements.txt 2>/dev/null; then
+        echo "✅ Dependencies installed with --user flag"
+    elif $PYTHON_PATH -m pip install --break-system-packages -r requirements.txt 2>/dev/null; then
+        echo "✅ Dependencies installed with --break-system-packages"
+    else
+        echo "❌ Failed to install dependencies automatically"
+        echo "💡 Please install manually:"
+        echo "   $PYTHON_PATH -m pip install --user -r requirements.txt"
+        echo "   OR"
+        echo "   pip3 install --user selenium webdriver-manager python-dotenv"
+        exit 1
+    fi
 else
     echo "✅ Dependencies OK"
 fi

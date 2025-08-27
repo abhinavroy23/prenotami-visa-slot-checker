@@ -202,6 +202,23 @@ This ensures correct Python environment and dependency handling.
 2. **"Browser window closed"** - Restart monitor, don't close Chrome manually  
 3. **"Not logged in"** - Login in browser window and press Enter in terminal
 4. **Email not sending** - Run `python3 test_email.py` to verify Gmail setup
+5. **"externally-managed-environment" error** - Modern Python installations prevent system-wide pip installs
+
+### Python Environment Issues
+**If you see "externally-managed-environment" error:**
+
+```bash
+# Option 1: User installation (recommended)
+python3 -m pip install --user -r requirements.txt
+
+# Option 2: If Option 1 fails
+python3 -m pip install --break-system-packages -r requirements.txt
+
+# Option 3: Individual packages
+pip3 install --user selenium webdriver-manager python-dotenv
+```
+
+**The `start_monitor.py` and `run_monitor.sh` scripts handle this automatically!**
 
 ## 💡 Pro Tips
 

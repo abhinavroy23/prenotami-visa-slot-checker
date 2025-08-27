@@ -48,19 +48,67 @@ def main():
                               capture_output=True, text=True)
         if result.returncode != 0:
             print("⚠️  Installing dependencies...")
-            subprocess.run([python_path, "-m", "pip", "install", "-r", "requirements.txt"])
+            print("💡 Trying user installation to avoid externally-managed-environment error...")
+            
+            # Try user installation first (--user flag)
+            try:
+                result = subprocess.run([python_path, "-m", "pip", "install", "--user", "-r", "requirements.txt"], 
+                                      capture_output=True, text=True, check=True)
+                print("✅ Dependencies installed with --user flag")
+            except subprocess.CalledProcessError:
+                print("⚠️  User installation failed, trying with --break-system-packages...")
+                try:
+                    result = subprocess.run([python_path, "-m", "pip", "install", "--break-system-packages", "-r", "requirements.txt"], 
+                                          capture_output=True, text=True, check=True)
+                    print("✅ Dependencies installed with --break-system-packages")
+                except subprocess.CalledProcessError as e:
+                    print("❌ Failed to install dependencies")
+                    print("💡 Please install manually:")
+                    print(f"   {python_path} -m pip install --user -r requirements.txt")
+                    print("   OR")
+                    print("   pip3 install --user selenium webdriver-manager python-dotenv")
+                    return 1
         else:
             print(result.stdout.strip())
     except Exception as e:
         print(f"❌ Environment check failed: {e}")
+        print("💡 Try installing dependencies manually:")
+        print(f"   {python_path} -m pip install --user selenium webdriver-manager python-dotenv")
         return 1
     
     print("")
     print("🚀 Starting monitor...")
     print("")
     
+    # Get the full path for execv if needed
+    if not os.path.isabs(python_path):
+        # Find the full path for relative commands like "python3"
+        import shutil
+        full_python_path = shutil.which(python_path)
+        if full_python_path:
+            python_path = full_python_path
+        else:
+            # Fallback to subprocess if we can't resolve the path
+            print(f"🔄 Using subprocess fallback for {python_path}")
+            try:
+                subprocess.run([python_path, "browser_monitor.py"])
+                return 0
+            except Exception as e:
+                print(f"❌ Failed to start monitor: {e}")
+                return 1
+    
     # Run the monitor with the correct Python
-    os.execv(python_path, [python_path, "browser_monitor.py"])
+    try:
+        os.execv(python_path, [python_path, "browser_monitor.py"])
+    except FileNotFoundError:
+        # Final fallback
+        print(f"🔄 Exec failed, using subprocess for {python_path}")
+        try:
+            subprocess.run([python_path, "browser_monitor.py"])
+            return 0
+        except Exception as e:
+            print(f"❌ Failed to start monitor: {e}")
+            return 1
 
 if __name__ == "__main__":
     sys.exit(main())
